@@ -5,7 +5,7 @@ To run simply install the following in a virtual environment inside linux
 ``
 pip install -r requirments.txt
 ``
-<br>
+
 When everything is installed run
 
 ``
