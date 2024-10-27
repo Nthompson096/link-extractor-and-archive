@@ -22,3 +22,7 @@ python archive.py
 
 Be sure you have a links.txt and it's curated to what you want archived on archive.ph
 You may edit the time for archival; check the code inside `archive.py` under `time.sleep` 60 seconds is the default but you may change it to something smaller.
+
+Feel free to try this on the website spacejam:
+
+https://www.spacejam.com/1996/
