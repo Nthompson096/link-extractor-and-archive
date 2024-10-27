@@ -32,6 +32,6 @@ if __name__ == "__main__":
     
     if links:
         log_links_to_file(links, 'links.txt')
-        print(f"Links have been logged to extracted_links.txt")
+        print(f"Links have been logged to links.txt")
     else:
         print("No links found or an error occurred.")
