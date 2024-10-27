@@ -11,7 +11,7 @@ pip install -r requirments.txt
 When everything is installed run
 
 ``
-python archive.py --weburl [weburl]
+python extractor.py --weburl [weburl]
 ``
 
 then use
