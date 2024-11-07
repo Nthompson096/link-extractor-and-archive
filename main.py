@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, send_file, url_for
+from flask import Flask, render_template, request, jsonify, send_file
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -52,11 +52,14 @@ def extract():
     url = request.form['url']
     links = extract_links(url)
     
+    # Extract usernames but do not include them in the written links
     usernames = [extract_username(link) for link in links]
     
     with open('links.txt', 'w') as f:
         for link, username in zip(links, usernames):
-            f.write(f"{link},{username}\n")
+            # Remove the username from the link if it exists
+            cleaned_link = link.split(',')[0]  # Keep only the part before ',user'
+            f.write(f"{cleaned_link}\n")  # Write cleaned link without username
     
     return jsonify(links=links, usernames=usernames)
 
