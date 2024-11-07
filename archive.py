@@ -40,32 +40,49 @@ def archive_url(url):
             verify=False  # Disable SSL verification
         )
         response.raise_for_status()
-        print(f"Successfully archived: {url}")
-        return True
+        
+        # Extract the archived URL from the response
+        archived_url = extract_archived_url(response.text)
+        if archived_url:
+            print(f"Successfully archived: {url}")
+            print(f"Archived URL: {archived_url}")
+            return archived_url
+        
+        return None
     except requests.exceptions.RequestException as e:
         print(f"Failed to archive: {url}")
         print(f"Error: {e}")
-        return False
+        return None
+
+def extract_archived_url(response_text):
+    # This is a placeholder for extracting the archived URL from the response text.
+    import re
+    match = re.search(r'https://archive\.ph/\S+', response_text)
+    return match.group(0) if match else None
 
 def main():
     # Read URLs from links.txt
     with open("links.txt", "r") as file:
         urls = file.read().splitlines()
 
-    # Archive each URL
-    successful_archives = 0
-    failed_archives = 0
+    # Open results.txt for writing results
+    with open("results.txt", "w") as results_file:
+        successful_archives = 0
+        failed_archives = 0
 
-    for url in urls:
-        if archive_url(url):
-            successful_archives += 1
-        else:
-            failed_archives += 1
-        time.sleep(60)  # Wait 10 seconds between requests
+        for url in urls:
+            archived_url = archive_url(url)
+            if archived_url:
+                results_file.write(f"Original URL: {url}\nArchived URL: {archived_url}\n\n")
+                successful_archives += 1
+            else:
+                failed_archives += 1
+            
+            time.sleep(10)  # Wait 10 seconds between requests
 
-    print(f"\nArchiving complete.")
-    print(f"Successfully archived: {successful_archives}")
-    print(f"Failed to archive: {failed_archives}")
+        print(f"\nArchiving complete.")
+        print(f"Successfully archived: {successful_archives}")
+        print(f"Failed to archive: {failed_archives}")
 
 if __name__ == "__main__":
     main()
