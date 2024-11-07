@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Extractor</title>
+</head>
+<body>
+    <h1>Link Extractor</h1>
+    
+    <h2>Extract Links</h2>
+    <form id="extractForm">
+        <label for="urlInput">Enter URL:</label>
+        <input type="text" id="url" name="url" required><br><br>
+        
+        <button type="submit">Extract Links</button>
+    </form>
+    
+    <div id="extractResult"></div>
+    <a id="downloadLink" style="display: none;" href="/download_links">Download links.txt</a>
+
+    <h2>Get Full Link</h2>
+    <form id="fullLinkForm">
+        <input type="text" id="username" name="username" placeholder="Enter username" required>
+        <button type="submit">Get Full Link</button>
+    </form>
+    
+    <div id="fullLinkResult"></div>
+
+    <script>
+        document.getElementById('extractForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            fetch('/extract', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                var resultHtml = '<h3>Extracted Links:</h3><ul>';
+                data.links.forEach((link, index) => {
+                    resultHtml += `<li>${link} (Username: ${data.usernames[index] || 'N/A'})</li>`;
+                });
+                resultHtml += '</ul>';
+                document.getElementById('extractResult').innerHTML = resultHtml;
+                document.getElementById('downloadLink').style.display = 'block';
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('fullLinkForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var username = document.getElementById('username').value;
+            
+            fetch(`/get_full_link/${username}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('fullLinkResult').innerHTML = `<p>Full Link: <a href="${data.full_link}" target="_blank">${data.full_link}</a></p>`;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
