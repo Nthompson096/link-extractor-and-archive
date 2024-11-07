@@ -1,4 +1,4 @@
-# link-extractor-and-archive
+# link extractor and archive
 
 A link extractor and archive
 
