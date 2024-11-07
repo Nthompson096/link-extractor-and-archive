@@ -3,6 +3,7 @@ import time
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import urllib3
+import re
 
 # Disable SSL warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -21,7 +22,7 @@ def requests_retry_session(retries=3, backoff_factor=0.3, status_forcelist=(500,
     session.mount('https://', adapter)
     return session
 
-def archive_url(url):
+def archive_with_archive_ph(url, debug=False):
     archive_url = "https://archive.ph/submit/"
     payload = {
         "url": url,
@@ -32,6 +33,9 @@ def archive_url(url):
     }
     
     try:
+        if debug:
+            print(f"[DEBUG] Sending request to Archive.ph for URL: {url}")
+        
         response = requests_retry_session().post(
             archive_url, 
             data=payload, 
@@ -39,24 +43,21 @@ def archive_url(url):
             timeout=60,
             verify=False  # Disable SSL verification
         )
+        
         response.raise_for_status()
         
-        # Extract the archived URL from the response
         archived_url = extract_archived_url(response.text)
         if archived_url:
-            print(f"Successfully archived: {url}")
-            print(f"Archived URL: {archived_url}")
+            print(f"Successfully archived with Archive.ph: {url}")
             return archived_url
         
         return None
     except requests.exceptions.RequestException as e:
-        print(f"Failed to archive: {url}")
+        print(f"Failed to archive with Archive.ph: {url}")
         print(f"Error: {e}")
         return None
 
 def extract_archived_url(response_text):
-    # This is a placeholder for extracting the archived URL from the response text.
-    import re
     match = re.search(r'https://archive\.ph/\S+', response_text)
     return match.group(0) if match else None
 
@@ -70,8 +71,16 @@ def main():
         successful_archives = 0
         failed_archives = 0
 
+        # Ask user for archiving method (only Archive.ph now)
+        print("Archiving method: Archive.ph selected by default.")
+
+        # Ask user if they want to enable debugging
+        debug_input = input("Enable debugging? (y/n): ").strip().lower()
+        debug_mode = debug_input == 'y'
+
         for url in urls:
-            archived_url = archive_url(url)
+            archived_url = archive_with_archive_ph(url, debug=debug_mode)
+            
             if archived_url:
                 results_file.write(f"Original URL: {url}\nArchived URL: {archived_url}\n\n")
                 successful_archives += 1
