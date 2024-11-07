@@ -4,6 +4,7 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import urllib3
 import re
+import argparse
 
 # Disable SSL warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -33,9 +34,6 @@ def archive_with_archive_ph(url, debug=False):
     }
     
     try:
-        if debug:
-            print(f"[DEBUG] Sending request to Archive.ph for URL: {url}")
-        
         response = requests_retry_session().post(
             archive_url, 
             data=payload, 
@@ -48,7 +46,8 @@ def archive_with_archive_ph(url, debug=False):
         
         archived_url = extract_archived_url(response.text)
         if archived_url:
-            print(f"Successfully archived with Archive.ph: {url}")
+            if debug:
+                print(f"[DEBUG] Successfully archived: {url} -> {archived_url}")
             return archived_url
         
         return None
@@ -62,17 +61,27 @@ def extract_archived_url(response_text):
     return match.group(0) if match else None
 
 def main():
-    # Read URLs from links.txt
-    with open("links.txt", "r") as file:
-        urls = file.read().splitlines()
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description='Archive URLs using Archive.ph.')
+    
+    parser.add_argument('file', type=str, help='Path to the text file containing URLs to archive.')
+    
+    args = parser.parse_args()
+    
+    urls = []
+    
+    # Read URLs from the specified file
+    try:
+        with open(args.file, 'r') as file:
+            urls = file.read().splitlines()
+    except FileNotFoundError:
+        print(f"Error: The file '{args.file}' was not found.")
+        return
 
     # Open results.txt for writing results
     with open("results.txt", "w") as results_file:
         successful_archives = 0
         failed_archives = 0
-
-        # Ask user for archiving method (only Archive.ph now)
-        print("Archiving method: Archive.ph selected by default.")
 
         # Ask user if they want to enable debugging
         debug_input = input("Enable debugging? (y/n): ").strip().lower()
