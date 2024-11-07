@@ -1,5 +1,4 @@
 requests
-time
 urllib3
 BeautifulSoup4
 argparse
