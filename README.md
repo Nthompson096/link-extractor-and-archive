@@ -4,21 +4,21 @@ A link extractor and archive
 
 To run install simply clone this repo or check the release page then do the following in a virtual environment inside linux
 
-``
-pip install -r requirments.txt
-``
+
+    pip install -r requirments.txt
+
 
 When everything is installed run
 
-``
-python extractor.py --weburl [weburl]
-``
+
+    python extractor.py --weburl [weburl]
+
 
 then use
 
-``
-python archive.py
-``
+
+    python archive.py
+
 
 To run the HTML website:
 
