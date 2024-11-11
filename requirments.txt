@@ -2,4 +2,3 @@ requests
 urllib3
 BeautifulSoup4
 argparse
-flask
