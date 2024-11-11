@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 import argparse
+from urllib.parse import urljoin, urlparse
+import re
 
         # Print the ASCII art
 print("""
