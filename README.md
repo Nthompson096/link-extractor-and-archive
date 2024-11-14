@@ -17,10 +17,14 @@ When everything is installed run
 then use
 
 
-    python archive.py
+    python archive.py --file
 
 Be sure you have a links.txt and it's curated to what you want archived on archive.ph
 You may edit the time for archival; check the code inside `archive.py` under `time.sleep` 10 seconds is the default but you may change it to something longer.
+
+for a single link use
+
+    python archive.py --url
 
 Feel free to try this on the website spacejam:
 
