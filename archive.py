@@ -8,7 +8,6 @@ import argparse
 import random
 
 
-
         # Print the ASCII art
 print("""
          ██▓     ██▓ ███▄    █  ██ ▄█▀    ▄▄▄       ██▀███   ▄████▄   ██░ ██  ██▓ ██▒   █▓▓█████ 
@@ -23,6 +22,7 @@ print("""
                                                         ░                         ░           
 """)
 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 def requests_retry_session(retries=5, backoff_factor=0.3, status_forcelist=(500, 502, 503, 504)):
     session = requests.Session()
     retry = Retry(
@@ -86,18 +86,25 @@ def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description='Archive URLs using Archive.ph.')
     
-    parser.add_argument('file', type=str, help='Path to the text file containing URLs to archive.')
+    parser.add_argument('--file', type=str, help='Path to the text file containing URLs to archive.')
+    parser.add_argument('--url', type=str, help='A single URL to archive.')
     
     args = parser.parse_args()
     
     urls = []
-    
-    # Read URLs from the specified file
-    try:
-        with open(args.file, 'r') as file:
-            urls = file.read().splitlines()
-    except FileNotFoundError:
-        print(f"Error: The file '{args.file}' was not found.")
+
+    if args.file:
+        # Read URLs from the specified file
+        try:
+            with open(args.file, 'r') as file:
+                urls = file.read().splitlines()
+        except FileNotFoundError:
+            print(f"Error: The file '{args.file}' was not found.")
+            return
+    elif args.url:
+        urls.append(args.url)
+    else:
+        print("Error: You must specify either a --file or a --url.")
         return
 
     total_urls = len(urls)
@@ -124,7 +131,7 @@ def main():
             else:
                 failed_archives += 1
             
-            time.sleep(10)  # Wait 15 seconds between requests
+            time.sleep(10)  # Wait 10 seconds between requests
 
         total_time = time.time() - start_time
         print(f"\nArchiving complete. Total time taken: {total_time:.2f} seconds")
