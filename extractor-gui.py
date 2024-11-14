@@ -97,9 +97,9 @@ def save_as_settings():
     urls = text_input.get("1.0", "end-1c").strip()
     exclude_words = exclude_input.get("1.0", "end-1c").strip()
 
-    if not urls:
-        messagebox.showwarning("Input Error", "Please enter URLs before saving.")
-        return
+    # if not urls:
+    #     messagebox.showwarning("Input Error", "Please enter URLs before saving.")
+    #     return
     
     # Let the user select a location and filename to save the settings
     file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt"), ("All files", "*.*")])
@@ -140,6 +140,15 @@ def load_settings():
 
     messagebox.showinfo("Settings Loaded", "Your settings have been loaded successfully.")
 
+def on_copy(event, widget):
+    widget.event_generate("<<Copy>>")
+
+def on_paste(event, widget):
+    widget.event_generate("<<Paste>>")
+
+def show_context_menu(event, widget):
+    context_menu.post(event.x_root, event.y_root)
+
 root = tk.Tk()
 root.title("Link Extractor")
 
@@ -157,6 +166,19 @@ exclude_lbl.pack(anchor="w")
 
 exclude_input = scrolledtext.ScrolledText(frame, wrap=tk.WORD, width=50, height=10)
 exclude_input.pack(pady=5)
+
+# Right-click context menu for text_input and exclude_input
+context_menu = tk.Menu(root, tearoff=0)
+context_menu.add_command(label="Copy", command=lambda: text_input.event_generate("<<Copy>>"))
+context_menu.add_command(label="Paste", command=lambda: text_input.event_generate("<<Paste>>"))
+
+context_menu_exclude = tk.Menu(root, tearoff=0)
+context_menu_exclude.add_command(label="Copy", command=lambda: exclude_input.event_generate("<<Copy>>"))
+context_menu_exclude.add_command(label="Paste", command=lambda: exclude_input.event_generate("<<Paste>>"))
+
+# Bind right-click to show the context menu
+text_input.bind("<Button-3>", lambda event: show_context_menu(event, text_input))
+exclude_input.bind("<Button-3>", lambda event: show_context_menu(event, exclude_input))
 
 btn_extract = tk.Button(frame, text="Extract and Log Links", command=extract_and_log_links)
 btn_extract.pack(pady=5)
