@@ -26,6 +26,8 @@ for the GUI
 * cleaner extraction
 * exclusion of URLS in extraction based on user input
 
+Be sure you have tkinter installed on your system.
+
 ![image](https://github.com/user-attachments/assets/f5440c48-0511-458e-8586-7294c85d0da7)
 
 
