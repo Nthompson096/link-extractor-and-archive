@@ -24,6 +24,32 @@ for the GUI
 * Save funtion
 * log
 * cleaner extraction
+
+Example from spacejam
+
+    https://www.spacejam.com/1996/cmp/pressbox/pressboxframes.html
+    https://www.spacejam.com/1996/cmp/jamcentral/jamcentralframes.html
+    https://www.spacejam.com/1996/cmp/bball/bballframes.html
+    https://www.spacejam.com/1996/cmp/tunes/tunesframes.html
+    https://www.spacejam.com/1996/cmp/lineup/lineupframes.html
+    https://www.spacejam.com/1996/cmp/jump/jumpframes.html
+    https://www.spacejam.com/1996/cmp/junior/juniorframes.html
+    https://shop.looneytunes.com/spacejam96?utm_source=SpaceJam1996&utm_medium=Website&utm_campaign=Theatrical2021
+    https://www.spacejam.com/1996/cmp/souvenirs/souvenirsframes.html
+    https://www.spacejam.com/1996/cmp/sitemap.html
+    https://www.spacejam.com/1996/cmp/behind/behindframes.html
+    https://policies.warnerbros.com/privacy/
+    http://policies.warnerbros.com/terms/en-us/
+    http://policies.warnerbros.com/terms/en-us/#accessibility
+    https://policies.warnerbros.com/privacy/en-us/#adchoices
+
+Used to be all broken up as
+
+    https://www.spacejam.com/1996/
+    cmp/pressbox/pressboxframes.html
+    cmp/jamcentral/jamcentralframes.html
+    cmp/bball/bballframes.html
+
 * exclusion of URLS in extraction based on user input
 
 Be sure you have tkinter installed on your system.
