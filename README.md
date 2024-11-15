@@ -21,7 +21,7 @@ for the GUI
 
 # Features of the GUI not present in CLI
 
-* Save funtion
+* Save funtion as JSON
 * log
 * cleaner extraction
 
@@ -54,7 +54,7 @@ Used to be all broken up as
 
 Be sure you have tkinter installed on your system.
 
-![image](https://github.com/user-attachments/assets/f5440c48-0511-458e-8586-7294c85d0da7)
+![image](https://github.com/user-attachments/assets/e49f5d1d-247a-4310-b315-d24f36fb92d1)
 
 
 # Archive Tool
