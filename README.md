@@ -24,6 +24,7 @@ for the GUI
 * Save funtion as JSON
 * log
 * cleaner extraction
+* exclusion of URLS in extraction based on user input
 
 Example from spacejam
 
@@ -49,8 +50,6 @@ Used to be all broken up as
     cmp/pressbox/pressboxframes.html
     cmp/jamcentral/jamcentralframes.html
     cmp/bball/bballframes.html
-
-* exclusion of URLS in extraction based on user input
 
 Be sure you have tkinter installed on your system.
 
