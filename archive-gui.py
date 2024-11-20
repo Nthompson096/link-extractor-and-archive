@@ -1,4 +1,5 @@
 import sys
+import os
 import time
 import random
 import re
@@ -11,7 +12,28 @@ import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import urllib3
+import atexit
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+
+# Lock File Location
+LOCK_FILE = "/tmp/archive-gui.lock"
+
+def is_another_instance_running():
+    """Check if another instance of the application is already running using a lock file."""
+    if os.path.exists(LOCK_FILE):
+        return True
+    # Create the lock file and ensure cleanup on exit
+    with open(LOCK_FILE, "w") as f:
+        f.write(str(os.getpid()))
+    atexit.register(remove_lock_file)
+    return False
+
+def remove_lock_file():
+    """Remove the lock file on exit."""
+    if os.path.exists(LOCK_FILE):
+        os.remove(LOCK_FILE)
 
 
 # Helper Functions
@@ -201,8 +223,12 @@ class ArchiveApp(QMainWindow):
         self.start_button.setEnabled(enabled)
 
 
-# Run the Application
+# Check for Duplicate Processes Using Lock File
 if __name__ == "__main__":
+    if is_another_instance_running():
+        print("Another instance of the program is already running. Exiting.")
+        sys.exit(1)
+
     app = QApplication(sys.argv)
     window = ArchiveApp()
     window.show()
