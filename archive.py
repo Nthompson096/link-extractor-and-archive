@@ -6,6 +6,7 @@ import urllib3
 import re
 import argparse
 import random
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
         # Print the ASCII art
@@ -22,7 +23,6 @@ print("""
                                                         ░                         ░           
 """)
 
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 def requests_retry_session(retries=5, backoff_factor=0.3, status_forcelist=(500, 502, 503, 504)):
     session = requests.Session()
     retry = Retry(
@@ -86,25 +86,19 @@ def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description='Archive URLs using Archive.ph.')
     
-    parser.add_argument('--file', type=str, help='Path to the text file containing URLs to archive.')
-    parser.add_argument('--url', type=str, help='A single URL to archive.')
+    parser.add_argument('file', type=str, help='Path to the text file containing URLs to archive.')
+    parser.add_argument('-w', '--wait', type=float, default=10, help='Time to wait between requests (in seconds). Default is 10.', metavar='')
     
     args = parser.parse_args()
     
     urls = []
-
-    if args.file:
-        # Read URLs from the specified file
-        try:
-            with open(args.file, 'r') as file:
-                urls = file.read().splitlines()
-        except FileNotFoundError:
-            print(f"Error: The file '{args.file}' was not found.")
-            return
-    elif args.url:
-        urls.append(args.url)
-    else:
-        print("Error: You must specify either a --file or a --url.")
+    
+    # Read URLs from the specified file
+    try:
+        with open(args.file, 'r') as file:
+            urls = file.read().splitlines()
+    except FileNotFoundError:
+        print(f"Error: The file '{args.file}' was not found.")
         return
 
     total_urls = len(urls)
@@ -131,7 +125,7 @@ def main():
             else:
                 failed_archives += 1
             
-            time.sleep(10)  # Wait 10 seconds between requests
+            time.sleep(args.wait)  # Use the user-specified or default wait time
 
         total_time = time.time() - start_time
         print(f"\nArchiving complete. Total time taken: {total_time:.2f} seconds")
