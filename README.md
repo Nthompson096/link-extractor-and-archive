@@ -70,6 +70,13 @@ for a single link use
 
     python archive.py --url
 
+# Archive GUI tool
+
+![image](https://github.com/user-attachments/assets/a5083a50-4dd3-49f6-9b9c-1d604a495d7f)
+
+Pretty self explanatory, will do the same functions as above.
+
+
 Feel free to try this on the website spacejam:
 
 https://www.spacejam.com/1996/
